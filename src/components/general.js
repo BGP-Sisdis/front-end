@@ -1,41 +1,95 @@
-import {  Button, Row, Col, Container } from 'react-bootstrap';
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import ResultBGP from './result'
+import { useState } from "react";
+import { Button, Container } from "react-bootstrap";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+import Modal from "react-bootstrap/Modal";
+import "reactjs-popup/dist/index.css";
 
-function GeneralBGP({isSupreme, start, idGeneral}) {
-    const typeOptions = [
-        'Loyal', 'Traitor'
-      ];
+function GeneralBGP({
+  setCommand,
+  isSupreme,
+  start,
+  load,
+  idGeneral,
+  changeType,
+  logs,
+}) {
+  const typeOptions = ["Loyal", "Traitor"];
+  const commandOptions = ["Attack", "Retreat"];
+  const [show, setShow] = useState(false);
 
-      const commandOptions = [
-        'Attack', 'Retreat'
-      ];
-      
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const changeCommand = (e) => {
+    setCommand(e.value);
+  };
+
   return (
-<Container>
-    <Row className='py-3 px-2 ms-5 mb-5 shadow'>
-        <Col>
-        { isSupreme ? <p>Supreme General</p>:<p>General {idGeneral}</p>}
-        </Col >
-        <Col >
-            <Dropdown options={typeOptions}  value={typeOptions[0]} placeholder="Select an option" />
-        </Col>
-        { isSupreme  &&  <><Col>
-            <p>Command</p>
-        </Col>
-        <Col>
-            <Dropdown options={commandOptions}  value={commandOptions[0]} placeholder="Select an option" />
-        </Col> </>}
-         <Col>
-         <Popup trigger={ start ? <Button variant="secondary" >See Logs</Button> : <></>} position="right center" ><ResultBGP title="Log General" start={start}/></Popup>
-         
-        </Col> 
-    </Row>
-    </Container>
+    <Container>
+      <div className="py-3 px-2 my-4 d-flex flex-column flex-md-row align-items-center shadow-sm general-card">
+        <div className="general-name-sec">
+          {isSupreme ? <p className="m-0">Supreme General</p> : <p className="m-0">General {idGeneral}</p>}
+        </div>
+        <div className="general-type-sec">
+          <Dropdown
+            disabled={start}
+            options={typeOptions}
+            value={typeOptions[0]}
+            placeholder="Select an option"
+            onChange={(e) => changeType(idGeneral, e.value)}
+          />
+        </div>
+        {isSupreme && (
+          <>
+            <div className="command-sec">
+              <p className="m-0">Command</p>
+            </div>
+            <div className="command-select-sec">
+              <Dropdown
+                disabled={start}
+                options={commandOptions}
+                value={commandOptions[0]}
+                placeholder="Select an option"
+                onChange={(e) => changeCommand(e)}
+              />
+            </div>{" "}
+          </>
+        )}
+        <div className="log-btn-sec">
+          {start && !load ? (
+            <Button variant="primary" onClick={handleShow}>
+              See Logs
+            </Button>
+          ) : (
+            <></>
+          )}
 
+          <Modal
+            show={show}
+            onHide={handleClose}
+            keyboard={false}
+            aria-labelledby="contained-modal-title-vcenter"
+            size="lg"
+            scrollable
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">
+                Log {isSupreme ? "Supreme General" : `General ${idGeneral}`}
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ul>
+                {start && !load ? logs.map((log, index) => {
+                  return <li key={`log`}>{log}</li>;
+                }) : ""}
+              </ul>
+            </Modal.Body>
+          </Modal>
+        </div>
+      </div>
+    </Container>
   );
 }
 

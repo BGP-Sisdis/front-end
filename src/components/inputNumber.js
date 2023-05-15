@@ -1,37 +1,42 @@
-import { Button, Row, Col, Container } from 'react-bootstrap';
-import axios from 'axios';
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import { Button, Container } from "react-bootstrap";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
-function InputNumber({setNumberOfGeneral, start, setStart, setConsensus}) {
-    const options = Array.from({length: 28}, (v, k) => k+3);
-    const startBgp = async () => {
-        setStart(true)
-        var res =  await axios.get(`http://localhost:8000/run/attack/lltll`);
-        console.log("1",res)
-        setConsensus(res.data.general_consensus)
-        console.log("2",res.data)
-    }
+function InputNumber({ start, setStart, changeNumberOfGeneral, runSimulator }) {
+  const options = Array.from({ length: 28 }, (v, k) => String(k+3));
 
-    const restartBgp = () => {
-        setStart(false)
-    }
-  
+  const startBgp = async () => {
+    runSimulator();
+  };
+
+  const restartBgp = () => {
+    setStart(false);
+  };
+
   return (
-    <Container className='mb-5'>
-        <Row>
-            <Col>
-                Number of General: 
-            </Col>
-            <Col>
-                <Dropdown disabled = {start} options={options} onChange={e => setNumberOfGeneral(e.value)} value={options[0]} placeholder="Select an option" />
-            </Col>
-            <Col>
-                <Button variant="secondary" size="lg" onClick={start ? restartBgp:startBgp}>{start ? 'Restart':'Start'}</Button>
-            </Col>
-        </Row>
+    <Container className="mb-5 w-100">
+      <div className="d-flex flex-column flex-md-row align-items-center">
+        <div className="w-25"><strong>Number of General:</strong></div>
+        <div className="w-25">
+          <Dropdown
+            disabled={start}
+            options={options}
+            onChange={(e) => changeNumberOfGeneral(e)}
+            value={options[0]}
+            placeholder="Select an option"
+          />
+        </div>
+        <div className="ms-auto w-25">
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={start ? restartBgp : startBgp}
+          >
+            {start ? "Restart" : "Start"}
+          </Button>
+        </div>
+      </div>
     </Container>
-
   );
 }
 

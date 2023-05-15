@@ -1,10 +1,12 @@
-import { Navbar, Container } from 'react-bootstrap';
+import { Navbar, Container } from "react-bootstrap";
 
 function NavbarBGP() {
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar expand="lg">
       <Container>
-        <Navbar.Brand href="#home" className='mx-auto'>BGP Simulator</Navbar.Brand>
+        <Navbar.Brand href="#home" className="mx-auto">
+          <strong>BGP Simulator</strong>
+        </Navbar.Brand>
       </Container>
     </Navbar>
   );
