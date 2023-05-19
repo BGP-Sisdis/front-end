@@ -13,6 +13,7 @@ function GeneralBGP({
   idGeneral,
   changeType,
   logs,
+  step,
 }) {
   const typeOptions = ["Loyal", "Traitor"];
   const commandOptions = ["Attack", "Retreat"];
@@ -27,7 +28,7 @@ function GeneralBGP({
 
   return (
     <Container>
-      <div className="py-3 px-2 my-4 d-flex flex-column flex-md-row align-items-center shadow-sm general-card">
+      <div className="py-2 px-1 my-4 d-flex flex-column flex-md-row align-items-center shadow-sm general-card">
         <div className="general-name-sec">
           {isSupreme ? <p className="m-0">Supreme General</p> : <p className="m-0">General {idGeneral}</p>}
         </div>
@@ -82,7 +83,7 @@ function GeneralBGP({
             <Modal.Body>
               <ul>
                 {start && !load ? logs.map((log, index) => {
-                  return <li key={`log`}>{log}</li>;
+                  return <li key={`log-${index}`}>{log["message"]}</li>;
                 }) : ""}
               </ul>
             </Modal.Body>

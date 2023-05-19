@@ -3,7 +3,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavbarBGP from "./components/navbar";
 import GeneralBGP from "./components/general";
-import ResultBGP from "./components/result";
+import ResultCard from "./components/result";
+import StepCard from "./components/step";
 import InputNumber from "./components/inputNumber";
 import axios from "axios";
 
@@ -17,6 +18,7 @@ function App() {
   const [actions, setActions] = useState({});
   const [numberLoyalGeneral, setnumberLoyalGeneral] = useState(0);
   const [logs, setLogs] = useState();
+  const [step, setStep] = useState(0);
 
   const renderGeneralInput = () => {
     const generals = [];
@@ -30,7 +32,9 @@ function App() {
         } else {
           logId = `General${i}`;
         }
-        generalLogs = logs[logId];
+        generalLogs = logs.filter(
+          (log) => log.node === logId && log.step <= step
+        );
       } else {
         generalLogs = [];
       }
@@ -44,6 +48,7 @@ function App() {
           idGeneral={i}
           changeType={changeType}
           logs={generalLogs}
+          step={step}
         />
       );
     }
@@ -72,6 +77,16 @@ function App() {
     setGeneralTypes(types);
   };
 
+  const changeStep = (type) => {
+    if (type === "next" && step < 8) {
+      setStep(step + 1);
+    } else if (type === "prev" && step > 1) {
+      setStep(step - 1);
+    } else if (type === "reset") {
+      setStep(0);
+    }
+  };
+
   const changeType = (id, type) => {
     const temp = [...generalTypes];
 
@@ -81,20 +96,6 @@ function App() {
       temp[id] = "t";
     }
     setGeneralTypes(temp);
-  };
-
-  const processLogs = (rawLogs) => {
-    const processedLogs = {};
-
-    for (let log of rawLogs) {
-      if (!processedLogs[log[1]]) {
-        processedLogs[log[1]] = [];
-      } else {
-        processedLogs[log[1]].push(`${log[0]} - ${log[2]}`);
-      }
-    }
-    setLogs(processedLogs);
-    console.log(logs);
   };
 
   const processResult = (generalConsensus, generalsAction) => {
@@ -134,10 +135,11 @@ function App() {
           console.log("Simulator Success");
           console.log(res.data);
 
-          processLogs(res.data.logs);
+          setLogs(res.data.logs);
           processResult(res.data.general_consensus, res.data.generals_action);
 
           setLoad(false);
+          changeStep("next");
         },
         (err) => {
           console.log("Simulator Failed");
@@ -150,6 +152,27 @@ function App() {
 
   return (
     <div className="App">
+      {/* {load ? (
+        <div class="loader-wrapper">
+        <div class="modal fade show" tabindex="-1" role="dialog" style={{display: "block"}} aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">
+                  Simulator is starting...
+                </h5>
+              </div>
+              <div class="modal-body center">
+                <div class="loader"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      ) : (
+        ""
+      )} */}
+
       <NavbarBGP />
       <div className="content d-flex flex-column flex-lg-row w-100">
         <div className="w-75">
@@ -157,24 +180,25 @@ function App() {
             <InputNumber
               start={start}
               setStart={setStart}
-              setLogs={setLogs}
+              load={load}
               changeNumberOfGeneral={changeNumberOfGeneral}
               runSimulator={runSimulator}
+              step={step}
+              changeStep={changeStep}
             />
             {renderGeneralInput()}
           </div>
         </div>
-        <div className="w-25">
-          <div className="p-5 shadow content-card">
-            <ResultBGP
-              title="Result"
-              start={start}
-              load={load}
-              consensus={consensus}
-              actions={actions}
-              numberLoyalGeneral={numberLoyalGeneral}
-            />
-          </div>
+        <div className="w-25 d-flex flex-column">
+          <StepCard start={start} load={load} step={step} logs={logs} />
+          <ResultCard
+            start={start}
+            load={load}
+            step={step}
+            consensus={consensus}
+            actions={actions}
+            numberLoyalGeneral={numberLoyalGeneral}
+          />
         </div>
       </div>
     </div>
