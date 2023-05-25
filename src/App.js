@@ -145,38 +145,21 @@ function App() {
           console.log("Simulator Failed");
           console.log(err);
 
+          setStart(false);
           setLoad(false);
+
+          alert("Failed to run simulator!")
         }
       );
   };
 
   return (
     <div className="App">
-      {/* {load ? (
-        <div class="loader-wrapper">
-        <div class="modal fade show" tabindex="-1" role="dialog" style={{display: "block"}} aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Simulator is starting...
-                </h5>
-              </div>
-              <div class="modal-body center">
-                <div class="loader"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-      ) : (
-        ""
-      )} */}
-
       <NavbarBGP />
-      <div className="content d-flex flex-column flex-lg-row w-100">
-        <div className="w-75">
-          <div className="me-5 p-5 shadow content-card">
+
+      <div className="content d-flex flex-column flex-xl-row w-100">
+        <div id="main-content" className="w-100 mb-4 me-lg-5">
+          <div className="p-5 shadow content-card">
             <InputNumber
               start={start}
               setStart={setStart}
@@ -189,7 +172,8 @@ function App() {
             {renderGeneralInput()}
           </div>
         </div>
-        <div className="w-25 d-flex flex-column">
+
+        <div id="aside" className="w-100 d-flex flex-column flex-md-row flex-xl-column">
           <StepCard start={start} load={load} step={step} logs={logs} />
           <ResultCard
             start={start}

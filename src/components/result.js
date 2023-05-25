@@ -17,28 +17,37 @@ function ResultCard({
   };
 
   return (
-    <div className="p-5 shadow content-card mb-4">
+    <div className="p-5 shadow content-card mb-4 w-100 w-md-50 w-xl-100">
       <div className="mx-auto w-100">
         <h4 className="mb-4">Result</h4>
-        {!start && !load ? (
-          <p>Simulator is not started.</p>
-        ) : ("")}
-        {load ? (
-          <div class="loader"></div>
-        ) : ("")}
+        {!start && !load ? <p>Simulator is not started.</p> : ""}
+        {load ? <div class="loader"></div> : ""}
         {start && !load ? (
           <>
             {step > 6 ? (
               <>
                 <ul>{renderGeneralAction()}</ul>
                 <p>Number of Loyal General: {numberLoyalGeneral}</p>
-                {step > 7 ? <p><strong>General Consensus: {consensus}</strong></p> : ""}
+                {step > 7 ? (
+                  <div id="consensus" className={consensus === "ATTACK" || consensus === "RETREAT" ? "bg-success": "bg-danger"}>
+                    <p>
+                      <strong>General Consensus:</strong>
+                    </p>
+                    <p>
+                      <strong>{consensus}</strong>
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
               </>
             ) : (
               <p>Waiting generals' action</p>
             )}
           </>
-        ) : ("")}
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

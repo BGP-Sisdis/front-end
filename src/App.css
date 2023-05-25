@@ -40,7 +40,6 @@
 .command-sec,
 .command-select-sec,
 .log-btn-sec {
-  width: 20%;
   padding: 5px 10px;
 }
 
@@ -106,6 +105,62 @@
   }
 }
 
-#steps-card .step {
+#step {
+  width: fit-content;
+  font-weight: 800;
   font-size: 1.15rem;
+  background-color: #002845;
+  color: white;
+  padding: 12px;
+  border-radius: 5px;
+}
+
+#step-number {
+  font-size: 2.25rem;
+}
+
+#steps-card p {
+  margin: 0px;
+}
+
+#step-desc {
+  font-size: 1.15rem;
+  padding: 0px 12px;
+}
+
+#consensus {
+  border-radius: 5px;
+  padding: 4px;
+  color: white;
+}
+
+#consensus p {
+  margin: 0px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .general-name-sec,
+  .general-type-sec,
+  .command-sec,
+  .command-select-sec,
+  .log-btn-sec {
+    width: 20%;
+  }
+}
+
+@media (min-width: 992px) {
+  .w-lg-50 {
+    width: 50%!important;
+  }
+}
+
+@media (min-width: 1200px) {
+  #main-content {
+    width: 70%!important;
+  }
+
+  #aside {
+    width: 30%!important;
+  }
 }

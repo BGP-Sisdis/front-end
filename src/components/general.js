@@ -83,7 +83,7 @@ function GeneralBGP({
             <Modal.Body>
               <ul>
                 {start && !load ? logs.map((log, index) => {
-                  return <li key={`log-${index}`}>{log["message"]}</li>;
+                  return <li key={`log-${index}`}><strong>Step {log["step"]}</strong> - {log["message"]}</li>;
                 }) : ""}
               </ul>
             </Modal.Body>
